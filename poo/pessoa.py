@@ -1,24 +1,32 @@
 class Pessoa:
-	def __init__(self, nome=None, idade=37):
+	def __init__(self, nome=None, idade=37, *filhos):
+		# atributo de instancia
 		self.nome = nome
 		self.idade = idade
-
+		# atributo complexo
+		self.filhos = list(filhos)
+	
+	# método 
 	def cumprimentar(self):
 		return f'Olá {id(self)}'
 
 
 if __name__ == '__main__':
-	p = Pessoa('Feitosa')
-	print(Pessoa.cumprimentar(p))
+	feitosa = Pessoa(nome='Feitosa')
+	uadson = Pessoa(nome='Uadson')
+	print(Pessoa.cumprimentar(uadson))
 	# id
-	print(id(p))
+	print(id(uadson))
 	# ou
-	print(p.cumprimentar())
-	print(p.nome)
+	print(uadson.cumprimentar())
+	print(feitosa.nome)
 	# alterando o atributo
-	p.nome = 'Uadson'
-	print(p.nome)
-	print(p.idade)
+	uadson.nome = 'Castro'
+	print(uadson.nome)
+	print(uadson.idade)
+	print(uadson.filhos)
+	for filho in uadson.filhos:
+		print(filho.nome)
 
 
  
