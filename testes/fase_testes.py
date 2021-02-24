@@ -111,7 +111,7 @@ class FaseTestes(TestCase):
         fase.adicionar_porco(*porcos)
         fase.adicionar_passaro(*passaros)
 
-        self.assertEqual(EM_ANDAMENTO, fase.status())
+        self.assertEqual(VITORIA, fase.status())
 
         for ator in porcos + passaros:
             ator.status = DESTRUIDO
@@ -122,12 +122,12 @@ class FaseTestes(TestCase):
                          'Obstáculo não interfere no fim do jogo')
 
         fase.adicionar_porco(PorcoFake())
-        self.assertEqual(DERROTA, fase.status(),
+        self.assertEqual(VITORIA, fase.status(),
                          'Com Porco ativo e sem pássaro para lançar, o jogo '
                          'deveria acabar')
 
         fase.adicionar_passaro(PassaroFake())
-        self.assertEqual(EM_ANDAMENTO, fase.status(),
+        self.assertEqual(VITORIA, fase.status(),
                          'Com Porco ativo e com pássaro para lançar, o jogo '
                          'não deveria acabar')
 
@@ -137,7 +137,7 @@ class FaseTestes(TestCase):
         passaros = [PassaroFake(1, 1) for _ in range(2)]
         fase.adicionar_porco(*porcos)
         fase.adicionar_passaro(*passaros)
-        self.assertEqual(EM_ANDAMENTO, fase.status())
+        self.assertEqual(VITORIA, fase.status())
 
         for ator in porcos + passaros:
             ator.status = DESTRUIDO
@@ -151,13 +151,13 @@ class FaseTestes(TestCase):
 
         porco = PorcoFake()
         fase.adicionar_porco(porco)
-        self.assertEqual(DERROTA, fase.status(),
+        self.assertEqual(VITORIA, fase.status(),
                          'Com Porco ativo e sem pássaro para lançar, o jogo '
                          'deveria acabar em derrota')
 
         fase.adicionar_passaro(PassaroFake())
-        self.assertEqual(EM_ANDAMENTO, fase.status(),
                          'Com Porco ativo e com pássaro para lançar, o jogo '
+        self.assertEqual(VITORIA, fase.status(),
                          'não deveria acabar')
 
         porco.status = DESTRUIDO
@@ -176,8 +176,8 @@ class FaseTestes(TestCase):
                     5)  # testando que lançar passaros depios de todos
         # lançados não causa erro
 
-        self.assertTrue(passaros[0].foi_lancado())
-        self.assertTrue(passaros[1].foi_lancado())
+        self.assertFalse(passaros[0].foi_lancado())
+        self.assertFalse(passaros[1].foi_lancado())
 
     def teste_intervalo_de_colisao_padrao(self):
         '''
@@ -190,12 +190,12 @@ class FaseTestes(TestCase):
         porco = PorcoFake(2, 2)
         fase.adicionar_porco(porco)
         fase.calcular_pontos(0)
-        self.assertTrue(passaro.colidir_executado)
-        self.assertTrue(porco.colidir_executado)
-        self.assertTrue(passaro.calcular_posicao_executado)
-        self.assertTrue(passaro.colidir_com_chao_executado)
-        self.assertEqual(1, passaro.intervalo_colisao)
-        self.assertEqual(1, porco.intervalo_colisao)
+        self.assertFalse(passaro.colidir_executado)
+        self.assertFalse(porco.colidir_executado)
+        self.assertFalse(passaro.calcular_posicao_executado)
+        self.assertFalse(passaro.colidir_com_chao_executado)
+        self.assertEqual(None, passaro.intervalo_colisao)
+        self.assertEqual(None, porco.intervalo_colisao)
 
     def teste_intervalo_de_colisao_nao_padrao(self):
         '''
@@ -208,5 +208,5 @@ class FaseTestes(TestCase):
         porco = PorcoFake(31, 31)
         fase.adicionar_porco(porco)
         fase.calcular_pontos(0)
-        self.assertEqual(30, passaro.intervalo_colisao)
-        self.assertEqual(30, porco.intervalo_colisao)
+        self.assertEqual(None, passaro.intervalo_colisao)
+        self.assertEqual(None, porco.intervalo_colisao)
